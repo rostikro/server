@@ -14,7 +14,7 @@ router.get("/api/get/:id", userAuth, async (req, res) => {
   try {
     let marks = await Marks.find({ id: req.params.id });
     if (!marks) {
-      return res.status(404).json({
+      return res.status(200).json({
         success: false,
         msg: "Marks not found",
       });
@@ -25,7 +25,7 @@ router.get("/api/get/:id", userAuth, async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
+    return res.status(200).json({
       success: false,
       msg: "An error occured at marksAPI",
     });
