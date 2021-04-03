@@ -52,7 +52,7 @@ UserSchema.methods.generateJWT = async function () {
 };
 
 UserSchema.methods.getUserInfo = function () {
-  return pick(this, ["name", "email", "role", "class"]);
+  return pick(this, ["_id", "name", "email", "role", "class"]);
 };
 
 const User = conn1.model("users", UserSchema);

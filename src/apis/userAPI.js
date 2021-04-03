@@ -18,14 +18,14 @@ router.post("/api/login", LoginValidation, Validator, async (req, res) => {
     // Check if user exist in DB
     let user = await User.findOne({ username });
     if (!user) {
-      return res.status(200).json({
+      return res.status(404).json({
         success: false,
         msg: "User not found",
       });
     }
     // Check if password is correct
     if (!(await user.comparePassword(password))) {
-      return res.status(200).json({
+      return res.status(401).json({
         success: false,
         msg: "Password is incorrect",
       });
@@ -40,7 +40,7 @@ router.post("/api/login", LoginValidation, Validator, async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    return res.status(200).json({
+    return res.status(500).json({
       success: false,
       msg: "An error occured",
     });
@@ -58,8 +58,13 @@ router.post("/api/login-token", userAuth, async (req, res) => {
   try {
     let { id, role } = req.body;
     let user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+      });
+    }
     if (role !== user.role) {
-      return res.status(200).json({
+      return res.status(401).json({
         success: false,
       });
     }
@@ -68,7 +73,7 @@ router.post("/api/login-token", userAuth, async (req, res) => {
       user: user.getUserInfo(),
     });
   } catch (e) {
-    return res.status(200).json({
+    return res.status(500).json({
       success: false,
     });
   }
